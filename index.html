@@ -1,7 +1,28 @@
 ---
-# You don't need to edit this file, it's empty on purpose.
-# Edit theme's home layout instead if you wanna make some changes
-# See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-layout: home
+title: Welcome to OpenVDM
+layout: single
 author_profile: true
 ---
+
+OpenVDM is a ship-wide data management platform for research vessels. It retrieves
+and organizes files from multiple instrument and data-acquisition systems into a
+unified cruise data package, with web-based access and a plugin architecture for
+custom data processing.
+
+## Key Features
+
+- **Automated data ingestion** from local directories, rsync servers, SMB shares,
+  SSH servers, and rclone cloud remotes
+- **Cruise and lowering lifecycle management** — create, monitor, and finalize cruise
+  and dive/lowering data packages
+- **Data dashboard** with plugin-generated visualizations and trackline maps
+- **Ship-to-shore transfer** for continuous synchronization to a shoreside archive
+- **Extensible plugin system** for custom per-file parsing and quality testing
+- **Web-based administration** for managing transfers, extra directories, and hooks
+
+## Quick Links
+
+- [Installation Guide](/docs/installation)
+- [Core Concepts](/docs/core_concepts)
+- [Collection System Transfers](/docs/cst_overview)
+- [Writing a Plugin](/docs/plugin_development)

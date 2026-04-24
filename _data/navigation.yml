@@ -1,9 +1,73 @@
 main:
-  - title: "Posts"
-    url: /posts/
-  - title: "Categories"
-    url: /categories/
-  - title: "Tags"
-    url: /tags/
   - title: "About"
     url: /about/
+
+navdocs:
+  - title: Getting Started
+    children:
+      - title: "Core Concepts"
+        url: /docs/core_concepts
+      - title: "Architecture"
+        url: /docs/architecture
+      - title: "Installation"
+        url: /docs/installation
+
+  - title: Configuration
+    children:
+      - title: "openvdm.yaml"
+        url: /docs/config_openvdm_yaml
+      - title: "Config.php"
+        url: /docs/config_php
+      - title: "Supervisor Setup"
+        url: /docs/supervisor_setup
+
+  - title: Data Transfers
+    children:
+      - title: "Collection System Transfers"
+        url: /docs/cst_overview
+      - title: "Cruise Data Transfers"
+        url: /docs/cdt_overview
+      - title: "Ship-to-Shore Transfer"
+        url: /docs/s2s_overview
+      - title: "Transfer Types"
+        url: /docs/transfer_types
+      - title: "Extra Directories"
+        url: /docs/extra_directories
+
+  - title: Cruise & Lowering Management
+    children:
+      - title: "Cruise Lifecycle"
+        url: /docs/cruise_lifecycle
+      - title: "Lowering Lifecycle"
+        url: /docs/lowering_lifecycle
+      - title: "Data Dashboard"
+        url: /docs/data_dashboard
+      - title: "Post-Hook Commands"
+        url: /docs/post_hooks
+
+  - title: Plugin Development
+    children:
+      - title: "Plugin Overview"
+        url: /docs/plugin_overview
+      - title: "Writing a Plugin"
+        url: /docs/plugin_development
+      - title: "Quality Tests"
+        url: /docs/plugin_quality_tests
+
+  - title: Administration
+    children:
+      - title: "Web Interface Tour"
+        url: /docs/web_interface
+      - title: "Database Backup & Restore"
+        url: /docs/db_backup_restore
+      - title: "Upgrading OpenVDM"
+        url: /docs/upgrading
+
+  - title: Links
+    children:
+      - title: "OceanDataTools Home"
+        icon: "fas fa-fw fa-link"
+        url: "https://www.oceandatatools.org"
+      - title: "GitHub Repository"
+        icon: "fab fa-fw fa-github"
+        url: "https://github.com/OceanDataTools/openvdm"
