@@ -36,23 +36,15 @@ toc_sticky: true
 5. **Update PHP/JS dependencies:**
    ```bash
    cd www/
-   composer install
    bash post_composer.sh
-   npm install
    ```
 
-6. **Re-run the install script** to pick up any new Supervisor configurations,
-   Apache vhost changes, or system package requirements:
-   ```bash
-   bash utils/install-openvdm.sh
-   ```
-
-7. **Restart all workers:**
+6. **Restart all workers:**
    ```bash
    sudo supervisorctl restart all
    ```
 
-8. **Verify** the web interface loads and all workers show `RUNNING`:
+7. **Verify** the web interface loads and all workers show `RUNNING`:
    ```bash
    sudo supervisorctl status
    ```
@@ -61,7 +53,7 @@ toc_sticky: true
 
 ### 2.14 → 2.15
 
-- Transfer log files moved to `OpenVDM/TransferLogs/` inside the cruise directory.
+- Transfer log files moved to `/opt/log/openvdm` outside of the cruise directory.
   Run `database/openvdm_214_to_215.sql` to update the database schema.
 - PHP 8.2 compatibility fixes applied to the web frontend.
 

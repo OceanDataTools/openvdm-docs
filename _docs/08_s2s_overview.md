@@ -39,7 +39,7 @@ the web interface.
 
 | Field | Description |
 |---|---|
-| **Transfer Type** | rsync Server, SSH, or rclone |
+| **Transfer Type** | SSH, or rclone |
 | **Server / Credentials** | Destination host and authentication |
 | **Destination Directory** | Remote path (relative for non-local, `remote:path` for rclone) |
 | **Enabled** | Whether the scheduler should submit S2S jobs |
@@ -49,11 +49,8 @@ the web interface.
 
 | Type | Notes |
 |---|---|
-| rsync Server | Direct rsync daemon connection |
 | SSH | rsync over SSH |
 | rclone | Any rclone-supported remote; `:` in destination field triggers rclone path |
-
-Local directory is not supported for S2S — the shore-side archive is always remote.
 
 ## Bandwidth Considerations
 

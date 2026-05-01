@@ -18,6 +18,8 @@ navdocs:
         url: /docs/config_openvdm_yaml
       - title: "Config.php"
         url: /docs/config_php
+      - title: "data_dashboard.yaml"
+        url: /docs/config_data_dashboard_yaml
       - title: "Supervisor Setup"
         url: /docs/supervisor_setup
 
@@ -51,8 +53,6 @@ navdocs:
         url: /docs/plugin_overview
       - title: "Writing a Plugin"
         url: /docs/plugin_development
-      - title: "Quality Tests"
-        url: /docs/plugin_quality_tests
 
   - title: Administration
     children:

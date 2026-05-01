@@ -42,14 +42,15 @@ interface to manage transfers.
 | Field | Description |
 |---|---|
 | **Include Filters** | Glob patterns — only matching files are transferred |
-| **Exclude Filters** | Glob patterns — matching files are skipped |
-| **Start/End Date Offset** | Transfer only files whose modification time falls within a rolling time window (hours) |
+| **Exclude Filters** | Glob patterns — matching files are skipped, but will be flagged as incorrectly names |
+| **Ignore Filters** | Glob patterns — matching files are skipped |
 
 ### Transfer Behaviour
 
 | Field | Description |
 |---|---|
-| **Staleness** | Minutes of inactivity before a transfer is considered stale and re-queued |
+| **Skip based on file timestamps** | Transfer only files whose modification time falls within the cruise/lowering start/stop timestamps |
+| **Staleness** | Transfer files only if their file sizes have not changes within the specified period |
 | **Remove Source Files** | Delete transferred files from the source after a successful copy |
 | **Skip Empty Directories** | Do not create empty directories in the destination |
 | **Skip Empty Files** | Do not transfer zero-byte files |

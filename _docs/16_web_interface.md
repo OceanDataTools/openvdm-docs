@@ -41,12 +41,12 @@ The **Configuration** top-level menu provides access to all administrative panel
 
 | Panel | Purpose |
 |---|---|
-| Main Configuration | System-wide settings: warehouse path, gearman server, transfer interval, lowering options |
-| Collection System Transfers | Add, edit, enable/disable, and delete transfers |
-| Cruise Data Transfers | Manage backup and archive destinations |
-| Shoreside Data Warehouse | Configure the ship-to-shore transfer |
-| Extra Directories | Manage cruise/lowering subdirectories |
-| Users | Manage web interface user accounts |
+| Main | Create new/edit current cruise/lowering, finalized current cruise/lowering, run common tasks |
+| Collection System Transfers | Add, edit, enable/disable, and delete collection system transfers |
+| Extra Directories | Add, edit, enable/disable, and delete subdirectories not associated with collection systems |
+| Cruise Data Transfers | Add, edit, enable/disable, and delete transfers cruise data transfers |
+| Ship-to-ShoreTransfers | Add, edit, enable/disable, and delete ship-to-shore transfers |
+| System | Manage other aspects of the system such as links, and bandwidth settings |
 
 ## Cruise / Lowering Management
 
@@ -58,12 +58,6 @@ From the **Main** menu:
 | Finalize Current Cruise | Lock and finalize the current cruise package |
 | Setup New Lowering | Create a new lowering within the current cruise |
 | Finalize Current Lowering | Lock and finalize the current lowering |
-
-## Transfer Logs
-
-Detailed rsync/rclone logs for every transfer run are stored in
-`OpenVDM/TransferLogs/` within the cruise directory and are accessible from the
-web interface on each transfer's detail page.
 
 ## System On / Off
 

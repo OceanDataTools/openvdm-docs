@@ -78,7 +78,7 @@ postHookCommands:
 
 ## Notes
 
-- Commands run as the OpenVDM system user (typically `survey`).
+- Commands run as the OpenVDM system user (default `survey`).
 - A hook failure is reported in the web interface but does not prevent subsequent
   hooks or the next transfer from running.
 - Commands must be specified as a list of strings (not a shell string) — shell

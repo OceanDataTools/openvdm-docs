@@ -26,8 +26,6 @@ OpenVDM ships with several required extra directories pre-configured:
 | Name | Default Path | Purpose |
 |---|---|---|
 | `Dashboard_Data` | `OpenVDM/DashboardData/` | Plugin-generated dashboard JSON files |
-| `Tracklines` | `OpenVDM/Tracklines/` | GeoJSON/KML trackline outputs |
-| `Transfer_Logs` | `OpenVDM/TransferLogs/` | Per-transfer rsync log files |
 | `From_PublicData` | `From_PublicData/` | Data synced from the public data mount |
 
 ## Destination Directory Tokens
@@ -40,12 +38,3 @@ transfers:
 | `{cruiseID}` | Current cruise identifier |
 | `{loweringID}` | Current lowering identifier |
 | `{loweringDataBaseDir}` | The configured lowering base directory name (e.g. `Vehicle/`) |
-
-## Adding an Extra Directory
-
-1. Navigate to **Configuration → Extra Directories → Add Extra Directory**.
-2. Enter a **Name**, **Long Name**, and **Destination Directory**.
-3. Choose **Cruise or Lowering** scope.
-4. Set **Required** if this directory should always be created.
-5. Save and rebuild the cruise directory if the cruise is already active
-   (**Actions → Rebuild Cruise Directory**).

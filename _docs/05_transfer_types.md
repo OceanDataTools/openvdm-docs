@@ -53,7 +53,7 @@ Files are transferred using `rsync` over SSH.
 
 ## rclone
 
-Files are transferred using [rclone](https://rclone.org), enabling support for
+Only used for cruise data and ship-to-shore transfers.  Files are transferred using [rclone](https://rclone.org), enabling support for
 cloud and object storage backends (S3, Google Cloud Storage, Backblaze B2, etc.)
 as well as SFTP.
 
@@ -64,18 +64,18 @@ directory field, using the `remote:path` format — for example `gcs-bucket:crui
 - rclone must be installed and the remote must be configured in rclone's config
   file before use
 
-### rclone for SSH/SFTP
+### rclone for SSH/SFTP and SMB
 
-For SSH-based rclone transfers, OpenVDM generates a temporary rclone config using
-the SSH credentials configured in the transfer.  No pre-configured rclone remote
+For SSH-based and SMB-based transfers, OpenVDM generates a temporary rclone config using
+the SSH/SMB credentials configured in the transfer.  No pre-configured rclone remote
 is required for SSH destinations.
 
 ## Choosing a Transfer Type
 
 | Scenario | Recommended type |
 |---|---|
-| Instrument computer on the ship network | rsync Server or SSH |
-| Windows workstation with a shared folder | SMB Share |
-| Data already on the warehouse server | Local Directory |
+| Linux-based collection system on the ship network | rsync Server or SSH |
+| Windows-based collection system with a shared folder | SMB Share |
+| Data volume already connected to the warehouse server | Local Directory |
 | Cloud backup or archive | rclone |
 | Shore-side SFTP server | SSH or rclone (SFTP) |

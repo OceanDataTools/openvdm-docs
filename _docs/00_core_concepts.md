@@ -14,16 +14,17 @@ Understanding a few key concepts will help you get the most out of OpenVDM.
 
 OpenVDM organises every research cruise around a single **cruise data package** — a
 directory tree rooted at `<warehouse_base_dir>/<cruiseID>/`.  All raw instrument
-data, processed outputs, dashboards, MD5 checksums, and transfer logs live inside
-this tree.  When a cruise ends the directory is finalized and can be transferred to
-a shoreside archive as a complete, self-describing unit.
+data, processed outputs, data dashboard files, the cruise MD5 checksum manifest and
+cruise configuration filelive inside this tree.  When a cruise ends the directory
+is finalized and can be transferred to a shoreside archive as a complete, self-
+describing unit.
 
 ## Collection Systems
 
-A **collection system** is any instrument or data-acquisition computer that produces
-files OpenVDM should ingest.  Each collection system is represented in OpenVDM as a
-**Collection System Transfer** — a named, configured transfer job that pulls files
-from the source into a specific subdirectory of the cruise package.
+A **collection system** is any data-acquisition system that produces files OpenVDM
+should ingest.  Each collection system is represented in OpenVDM as a **Collection
+System Transfer** — a named, configured transfer job that pulls files from the
+source into a specific subdirectory of the cruise package.
 
 ## Transfers
 
@@ -35,22 +36,36 @@ OpenVDM distinguishes three categories of transfer:
 | **Cruise Data Transfer (CDT)** | Warehouse → Destination | Push the full cruise package to a secondary location |
 | **Ship-to-Shore Transfer (S2S)** | Warehouse → Shoreside | Continuously sync selected data to a shore-side archive |
 
-All three share the same five underlying **transfer types**: Local Directory, rsync
-Server, SMB Share, SSH Server, and rclone remote.
+## Transfers Types
 
-## Lowerings
+Depending on the transfer category, OpenVDM will support a variety of transfer types.
 
-A **lowering** represents a discrete submersible deployment or dive nested inside a
-cruise.  When the lowering feature is enabled OpenVDM creates a per-lowering
-subdirectory (e.g. `Vehicle/J0001/`) and tracks a parallel set of collection system
-transfers scoped to that lowering.
+| Category | Protocol |
+|---|---|---|
+| **Collection System Transfer (CST)** | Local Directory, Rsync Server, SMB Server, SSH Server |
+| **Cruise Data Transfer (CDT)** | Local Directory, Rsync Server, SMB Server, SSH Server, Rclone Remote |
+| **Ship-to-Shore Transfer (S2S)** | SSH Server, Rclone Remote |
+
+## Cruises and Lowerings
+
+A **cruise** represents a discrete vessel deployment occuring between two dates.
+
+A **lowering** represents a discrete submersible deployment within a cruise data
+package.  When the lowering feature is enabled OpenVDM creates a per-lowering sub-
+directory (e.g.`Vehicle/ROV0001/`) and tracks a parallel set of collection system
+transfers scoped to lowering-related collection systems.
 
 ## The Data Dashboard
 
-After each collection system transfer OpenVDM runs any matching **plugins** against
-the newly ingested files.  Plugins produce JSON dashboard objects — time-series
-charts, GeoJSON tracklines, image previews — that the web interface renders in
-real time.
+Section within the OpenVDM WebUI for visualizing collected data and their
+corresponding QA test results. After each collection system transfer OpenVDM runs
+any matching **plugins** against the newly ingested files.  Plugins produce JSON
+dashboard objects — time-series charts, GeoJSON tracklines, image previews — that
+the web interface renders as maps and graphs.
+
+## Hooks
+
+A **hook** is used to attach additional processes to key milestones during a cruise or lowering lifecycle.  There are hooks for after a cruise/lowering is created, after a cruise/lowering is finished, and after a collection system transfer is completed.
 
 ## Gearman Workers
 
@@ -63,5 +78,4 @@ independently and report progress back to the database.
 
 **Extra directories** are additional subdirectories created inside the cruise package
 that are not tied to a specific collection system.  Common examples include
-`Documentation/`, `Tracklines/`, and `Dashboard_Data/`.  Required extra directories
-are always created; optional ones are user-managed.
+`Documentation/`, `Tracklines/`, and `Dashboard_Data/`.

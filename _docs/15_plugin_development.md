@@ -8,7 +8,9 @@ toc_icon: "list"
 toc_sticky: true
 ---
 
-This guide walks through creating a data-dashboard plugin from scratch.
+## Placeholder for future guide
+
+<!-- This guide walks through creating a data-dashboard plugin from scratch.
 
 ## Prerequisites
 
@@ -136,3 +138,4 @@ class MyGPSPlugin(OpenVDMPlugin):
         parser = GGAParser()
         return parser.parse(filepath)
 ```
+ -->

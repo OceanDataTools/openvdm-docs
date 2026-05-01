@@ -48,17 +48,3 @@ How the **Destination Directory** field is interpreted depends on the transfer t
 | **Excluded Collection Systems** | Collection system transfers whose destination directories are excluded from this CDT |
 | **Excluded Extra Directories** | Extra directories excluded from this CDT |
 | **Include OpenVDM Files** | Whether to include OpenVDM metadata files (MD5 summary, cruise config) |
-
-### Mount Point
-
-When **Local Directory** is selected and the destination is not an rclone path, the
-**Is Mount Point** option verifies the destination is a mounted filesystem before
-transferring.  This prevents accidentally writing to an unmounted mount point.
-
-## rclone Destinations
-
-When the destination directory contains a `:` character it is treated as an rclone
-`remote:path`.  The **Is Mount Point** option is automatically hidden in the UI
-since it does not apply to rclone destinations.
-
-See [Transfer Types — rclone](/docs/transfer_types#rclone) for setup details.

@@ -14,7 +14,7 @@ configuration before it is available in the web interface.
 
 ## Enabling Lowering Components
 
-In the web UI navigate to **Configuration → Main Configuration** and enable
+In the web UI navigate to **Configuration → Main → Edit Current Cruise** and enable
 **Show Lowering Components**.  This activates the lowering menu and causes
 collection system transfers with **Cruise or Lowering** set to `Lowering` to be
 scoped to individual lowering directories.
@@ -57,11 +57,11 @@ writing to the cruise-level directories unaffected.
 
 **Web UI:** Main → Finalize Current Lowering
 
-1. Runs commands under `preFinalizeCurrentLowering`.
-2. Updates the MD5 summary for the lowering directory.
-3. Applies permissions to the lowering directory.
+1. Runs post-hook commands under `preFinalizeCurrentLowering`.
+2. Runs all lowering-related Collection system transfers
+3. Updates the MD5 summary for the lowering directory.
 4. Exports a final lowering configuration snapshot.
-5. Runs commands under `postFinalizeCurrentLowering`.
+5. Runs post-hook commands under `postFinalizeCurrentLowering`.
 
 After finalization the lowering is marked complete.  A new lowering can then be set
 up for the next dive.
@@ -70,9 +70,7 @@ up for the next dive.
 
 Lowering IDs typically follow vessel-specific conventions:
 
-- `J0001` — Jason dive number
-- `AT-039` — Alvin dive number
-- `SL0042` — SuBastian dive number
+- `S0001` — Vehicle prefix followed by 4-digit sequential number
 
 The lowering ID appears in directory names and exported filenames, so use the
 official dive number assigned by the vehicle team.

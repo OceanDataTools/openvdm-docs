@@ -24,21 +24,39 @@ top-level class that subclasses `OpenVDMPlugin` is registered.
 Each plugin defines a list of **file patterns** (glob strings) that determine which
 files it handles.  When the dashboard worker receives a list of newly transferred
 files it matches each filename against all registered plugins' patterns and runs
-every matching plugin.
+a file-format specific parser for the given file.
 
-## Plugin Types
+## Return Types
 
-### Data Plugins
+A plugin returns a json-object with the following schema:
+```
+{
+  <data_dashboard_type>:
+    visualizernData: {}
+    qualityTests: {}
+    stats: {}
+  ...
+}
+```
+
+### Visualizer Data
 
 A data plugin processes a single file and returns one or more **visualiser objects**
 — GeoJSON features, time-series arrays, image references, or text blocks — that the
 web interface renders on the dashboard.
 
-### Quality Test Plugins
+### Quality Tests
 
 A quality test plugin subclasses `OpenVDMParserQualityTest` and performs validation
 checks on a file, returning a list of pass/fail/warning results.  Quality test
-results are shown in the dashboard alongside the data visualisations.
+results are shown in the **Data Quality** tab of the data dashboard alongside the data
+visualisations.
+
+### Statistics
+
+A stats plugin subclasses `OpenVDMParserStats` and tabulated the statistics on a file,
+returning the requested results.  Stat results are shown in the **Data Quality** tab of
+the data dashboard alongside the data visualisations.
 
 ## Base Classes
 
@@ -48,6 +66,7 @@ Both plugin types are defined in `server/lib/openvdm_plugin.py`:
 |---|---|
 | `OpenVDMPlugin` | Data extraction and visualisation |
 | `OpenVDMParserQualityTest` | File validation and quality testing |
+| `OpenVDMParserStats` | File statistics |
 
 See [Writing a Plugin](/docs/plugin_development) for a step-by-step guide.
 

@@ -69,7 +69,7 @@ indefinitely under Supervisor.
 | `size_cacher.py` | _(periodic, not Gearman-registered)_ |
 | `reboot_reset.py` | _(run once on startup)_ |
 
-## Plugin System
+## Plugins and Parsers
 
 **Location:** `server/plugins/`
 
@@ -116,6 +116,6 @@ Configuration files for each worker are written by the install script to
 └──────────────┬──────────────────────────┘
                │ rsync / SMB / SSH / rclone
 ┌──────────────▼──────────────────────────┐
-│    Instrument Computers / Archives      │
+│     Collection Systems, Destinations    │
 └─────────────────────────────────────────┘
 ```

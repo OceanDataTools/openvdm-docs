@@ -13,7 +13,7 @@ OpenVDM's Python worker processes are managed by
 workers restart automatically on failure or system reboot.
 
 The install script writes individual Supervisor configuration files to
-`/etc/supervisor/conf.d/`.
+`/etc/supervisor/conf.d/openvdm.conf`.
 
 ## Worker Processes
 
@@ -40,13 +40,13 @@ The install script writes individual Supervisor configuration files to
 sudo supervisorctl status
 
 # Restart all workers (e.g. after a code update)
-sudo supervisorctl restart all
+sudo supervisorctl restart openvdm:*
 
 # Restart a single worker
-sudo supervisorctl restart openvdm_data_dashboard
+sudo supervisorctl restart openvdm:data_dashboard
 
 # View live log output
-sudo supervisorctl tail -f openvdm_run_collection_system_transfer
+sudo supervisorctl tail -f openvdm:run_collection_system_transfer_0
 ```
 
 ## Startup Reset
