@@ -55,14 +55,14 @@ Files are transferred using `rsync` over SSH.
 
 ## FTP Server
 
-Only used for collection system transfers.  OpenVDM mounts the FTP server with
-`rclone mount` and runs `rsync` locally against the mount point, the same way as
-an SMB share.  File filters, staleness, wildcard source directories and removing
+Only used for collection system transfers.  OpenVDM mounts the source directory
+on the FTP server with `rclone mount` and runs `rsync` locally against the mount
+point, the same way as an SMB share.  File filters, staleness, wildcard source directories and removing
 source files work as for other types.
 
-- **Server:** hostname or IP address.  An `ftp://` prefix or a path is removed, and
-  a `host:port` value moves the port into **Port**.
-- **Port:** the FTP server's port (default 21)
+- **Server:** hostname or IP address, followed by `:port` if the server doesn't use
+  port 21 (e.g. `ftp.example.org:2121`).  Put an IPv6 address in brackets to add a
+  port (`[2001:db8::1]:2121`).  An `ftp://` prefix or a path is removed.
 - **Username / Password:** FTP login.  For anonymous access, set the username to
   `anonymous`; no password is needed.
 - **Source path:** absolute path on the FTP server (e.g. `/data`)
