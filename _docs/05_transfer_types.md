@@ -8,9 +8,11 @@ toc_icon: "list"
 toc_sticky: true
 ---
 
-OpenVDM supports five transfer types for both collection system transfers (source)
-and cruise data transfers (destination).  The transfer type is selected in the web
-UI when configuring a transfer.
+OpenVDM supports six transfer types.  The transfer type is selected in the web UI
+when configuring a transfer.  Most types work for both collection system transfers
+(source) and cruise data transfers (destination).  FTP Server is only used for
+collection system transfers, and rclone only for cruise data and ship-to-shore
+transfers.
 
 ## Local Directory
 
@@ -51,6 +53,29 @@ Files are transferred using `rsync` over SSH.
 - **Password or SSH key:** authentication method
 - **Source/Destination path:** absolute path on the remote server
 
+## FTP Server
+
+Only used for collection system transfers.  OpenVDM mounts the FTP server with
+`rclone mount` and runs `rsync` locally against the mount point, the same way as
+an SMB share.  File filters, staleness, wildcard source directories and removing
+source files work as for other types.
+
+- **Server:** hostname or IP address.  An `ftp://` prefix or a path is removed, and
+  a `host:port` value moves the port into **Port**.
+- **Port:** the FTP server's port (default 21)
+- **Username / Password:** FTP login.  For anonymous access, set the username to
+  `anonymous`; no password is needed.
+- **Source path:** absolute path on the FTP server (e.g. `/data`)
+- The server is mounted read-only unless **Remove Source Files** is enabled.
+- Requires FUSE (`fuse3`), which the installer installs.  Only plain FTP is
+  supported, not FTPS (FTP over TLS).
+
+`rsync` detects changed files by size and modification time.  FTP servers that
+support the `MLSD` command report exact modification times.  Servers that only
+support `LIST` often report times to the minute, so a file that changes without
+changing size within the same minute as the last transfer isn't copied again until
+it changes again.
+
 ## rclone
 
 Only used for cruise data and ship-to-shore transfers.  Files are transferred using [rclone](https://rclone.org), enabling support for
@@ -77,5 +102,6 @@ is required for SSH destinations.
 | Linux-based collection system on the ship network | rsync Server or SSH |
 | Windows-based collection system with a shared folder | SMB Share |
 | Data volume already connected to the warehouse server | Local Directory |
+| Instrument or collection system that only offers FTP | FTP Server |
 | Cloud backup or archive | rclone |
 | Shore-side SFTP server | SSH or rclone (SFTP) |
