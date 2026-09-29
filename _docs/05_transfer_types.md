@@ -10,9 +10,8 @@ toc_sticky: true
 
 OpenVDM supports six transfer types.  The transfer type is selected in the web UI
 when configuring a transfer.  Most types work for both collection system transfers
-(source) and cruise data transfers (destination).  FTP Server is only used for
-collection system transfers, and rclone only for cruise data and ship-to-shore
-transfers.
+(source) and cruise data transfers (destination); rclone is only used for cruise
+data and ship-to-shore transfers.
 
 ## Local Directory
 
@@ -55,22 +54,27 @@ Files are transferred using `rsync` over SSH.
 
 ## FTP Server
 
-Only used for collection system transfers.  OpenVDM mounts the source directory
-on the FTP server with `rclone mount` and runs `rsync` locally against the mount
-point, the same way as an SMB share.  File filters, staleness, wildcard source directories and removing
-source files work as for other types.
+As a **source** (collection system transfers), OpenVDM mounts the source
+directory on the FTP server with `rclone mount` and runs `rsync` locally against
+the mount point, the same way as an SMB share.  File filters, staleness, wildcard
+source directories and removing source files work as for other types.
+
+As a **destination** (cruise data transfers), OpenVDM copies (or, with
+**Sync to Destination**, syncs) the cruise to `<destination path>/<cruise ID>` on
+the FTP server with rclone, the same way as an SSH destination.  **Test Setup**
+checks the login, the destination directory and write access.
 
 - **Server:** hostname or IP address, followed by `:port` if the server doesn't use
   port 21 (e.g. `ftp.example.org:2121`).  Put an IPv6 address in brackets to add a
   port (`[2001:db8::1]:2121`).  An `ftp://` prefix or a path is removed.
 - **Username / Password:** FTP login.  For anonymous access, set the username to
   `anonymous`; no password is needed.
-- **Source path:** absolute path on the FTP server (e.g. `/data`)
-- The server is mounted read-only unless **Remove Source Files** is enabled.
-- Requires FUSE (`fuse3`), which the installer installs.  Only plain FTP is
-  supported, not FTPS (FTP over TLS).
+- **Source/Destination path:** absolute path on the FTP server (e.g. `/data`)
+- As a source, the directory is mounted read-only unless **Remove Source Files**
+  is enabled.  Mounting requires FUSE (`fuse3`), which the installer installs.
+- Only plain FTP is supported, not FTPS (FTP over TLS).
 
-`rsync` detects changed files by size and modification time.  FTP servers that
+For sources, `rsync` detects changed files by size and modification time.  FTP servers that
 support the `MLSD` command report exact modification times.  Servers that only
 support `LIST` often report times to the minute, so a file that changes without
 changing size within the same minute as the last transfer isn't copied again until

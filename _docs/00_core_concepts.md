@@ -43,7 +43,7 @@ Depending on the transfer category, OpenVDM will support a variety of transfer t
 | Category | Protocol |
 |---|---|
 | **Collection System Transfer (CST)** | Local Directory, Rsync Server, SMB Server, SSH Server, FTP Server |
-| **Cruise Data Transfer (CDT)** | Local Directory, Rsync Server, SMB Server, SSH Server, Rclone Remote |
+| **Cruise Data Transfer (CDT)** | Local Directory, Rsync Server, SMB Server, SSH Server, FTP Server, Rclone Remote |
 | **Ship-to-Shore Transfer (S2S)** | SSH Server, Rclone Remote |
 
 ## Cruises and Lowerings
