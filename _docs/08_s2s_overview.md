@@ -17,7 +17,9 @@ cruise data to a shore-side archive over a satellite or shore connection.
 1. The **scheduler** submits a `runShipToShoreTransfer` Gearman job each cycle if
    the S2S transfer is enabled.
 2. The worker builds a prioritised file list by walking the cruise directory and
-   applying the configured include/exclude filter patterns in parallel.
+   applying the configured include/exclude filter patterns in parallel. The
+   [always-ignored files and folders](/docs/cst_overview#always-ignored-files-and-folders)
+   are never transferred.
 3. Files are transferred using `rsync` or rclone in priority order.
 4. After one hour the scheduler automatically stops the running job and starts a
    fresh one to prevent stale connections from blocking new data.

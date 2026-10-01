@@ -18,6 +18,8 @@ cloud archive.
    non-running cruise data transfer.
 2. The worker tests the destination, builds an exclude filter list, then runs
    `rsync` or rclone to mirror `<warehouse_base_dir>/<cruiseID>/` to the destination.
+   The exclude list always includes the
+   [always-ignored files and folders](/docs/cst_overview#always-ignored-files-and-folders).
 3. Progress is reported back to the Gearman job as a percentage.
 
 ## Destination Directory Semantics
