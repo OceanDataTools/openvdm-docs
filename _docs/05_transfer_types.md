@@ -45,12 +45,43 @@ locally against the mount point.
 
 ## SSH Server
 
-Files are transferred using `rsync` over SSH.
+Collection system and ship-to-shore transfers use `rsync` over SSH. Cruise data
+transfers copy (or, with **Sync to Destination**, sync) the cruise to
+`<destination path>/<cruise ID>` with rclone over SFTP.
 
 - **Server:** hostname or IP address (no leading `/` or `\`)
 - **Username:** SSH login user
 - **Password or SSH key:** authentication method
 - **Source/Destination path:** absolute path on the remote server
+
+### Using an SSH key
+
+OpenVDM's transfers run as root on the OpenVDM server, so they log in with
+root's SSH key. The installer creates one if root has none. It's named after
+its type, `/root/.ssh/id_ed25519` on newer systems or `/root/.ssh/id_rsa` on
+older ones. To use it for a transfer, authorize it for the transfer's user on
+the remote server once. `ssh-copy-id` asks for that user's password and adds
+the key:
+
+```
+sudo ls /root/.ssh/*.pub
+sudo ssh-copy-id -i /root/.ssh/id_ed25519.pub <user>@<server>
+```
+
+Then set **Use SSH Public/Private key?** to **Yes** in the transfer and run **Test Setup**.
+
+The key used is the one `ssh` would use: the `IdentityFile` set for the server in
+`/root/.ssh/config`, or else the first of root's default keys that exists
+(`id_rsa`, `id_ecdsa`, `id_ed25519`, ...). To use a particular key for a server,
+add it to `/root/.ssh/config`:
+
+```
+Host backup.example.org
+    IdentityFile /root/.ssh/backup_key
+```
+
+`Host` patterns (`*.example.org`), `Match host` and `Match all` blocks are
+followed. Other `Match` criteria and `Include` aren't, for cruise data transfers.
 
 ## FTP Server
 
