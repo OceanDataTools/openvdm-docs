@@ -18,7 +18,7 @@ navdocs:
         url: /docs/config_openvdm_yaml
       - title: "Config.php"
         url: /docs/config_php
-      - title: "data_dashboard.yaml"
+      - title: "datadashboard.yaml"
         url: /docs/config_data_dashboard_yaml
       - title: "Supervisor Setup"
         url: /docs/supervisor_setup

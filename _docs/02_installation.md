@@ -77,5 +77,5 @@ target versions.
 ├── venv/                 Python virtual environment
 └── www/                  PHP/JS web application
     ├── app/Core          Config.php
-    └── etc/              data_dashboard.yaml
+    └── etc/              datadashboard.yaml
 ```

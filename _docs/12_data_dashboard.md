@@ -27,16 +27,25 @@ discover all available visualisations.
 
 ## Dashboard Object Format
 
-Plugins return a dict with a `visualizerData` key containing a list of visualiser
-objects.  Each visualiser object has a `type` field that determines how the web
-interface renders it:
+Each parser returns a dict with three lists: `visualizerData` (what the dashboard draws),
+`qualityTests` and `stats` (shown on the **Data Quality** page).  The entries in
+`visualizerData` depend on how the data type is drawn, which is set per tab in
+[datadashboard.yaml](/docs/config_data_dashboard_yaml):
 
-| Type | Rendered as |
+| Drawn as (`visType`) | `visualizerData` entries |
 |---|---|
-| `FeatureCollection` (GeoJSON) | Interactive Leaflet trackline map |
-| `timeseries` | Chart.js time-series plot |
-| `image` | Inline image preview |
-| `text` | Formatted text block |
+| Map track (`geoJSON`) | GeoJSON `FeatureCollection`s, e.g. a GPS trackline |
+| Map tiles (`tms`) | An object with `tileURL` (a GeoTIFF served by TiTiler) or `tileDirectory` (pre-rendered tiles) |
+| Chart (`json`, `json-reversedY`, `json-inverted`, `json-reversedY-inverted`, `json-profile`) | One object per series: `{"label": "Temperature", "unit": "C", "data": [[<ms since epoch>, <value>], ...]}` |
+
+All the chart types use the same series, so a data type can be drawn against time and
+as a depth profile without changing its parser.
+
+## Tabs and Charts
+
+Which tabs the dashboard has, and which maps and charts each one shows, is set in
+[datadashboard.yaml](/docs/config_data_dashboard_yaml).  That page lists the map and
+chart types, including depth profiles, and the `lowering` view for vehicle data.
 
 ## Rebuild Data Dashboard
 
