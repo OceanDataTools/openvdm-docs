@@ -20,7 +20,7 @@ doesn't copy the whole cruise: it copies only the files matched by the
    already running.
 2. The worker lists the cruise directory and matches the files against the enabled
    Ship-to-Shore Transfers rules, in priority order.  The
-   [always-ignored files and folders](/docs/cst_overview#always-ignored-files-and-folders)
+   [always-ignored files and folders](cst_overview#always-ignored-files-and-folders)
    are never sent.
 3. The matched files are copied, highest priority first.
 4. A transfer that has run for an hour is stopped and started again, so files that
@@ -36,8 +36,8 @@ Set the destination under **Configuration → System**, on the **Shoreside Data 
 |---|---|
 | **Server IP** | The shoreside server |
 | **Server Username** | The SSH login on that server |
-| **Use SSH Public/Private key?** / **Server Password** | How to log in. See [Using an SSH key](/docs/transfer_types#using-an-ssh-key) |
-| **Cruise Data Directory** | An absolute path on the server, or an [rclone](/docs/transfer_types#rclone) `remote:path` |
+| **Use SSH Public/Private key?** / **Server Password** | How to log in. See [Using an SSH key](transfer_types#using-an-ssh-key) |
+| **Cruise Data Directory** | An absolute path on the server, or an [rclone](transfer_types#rclone) `remote:path` |
 
 With a server path, files are copied with `rsync` over SSH.  With a `remote:path`,
 they're copied with rclone, to any remote configured in root's rclone configuration

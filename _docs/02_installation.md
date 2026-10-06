@@ -69,11 +69,11 @@ defaults are your previous answers.
 - `fuse3`, for FTP Server collection system transfers
 - GDAL, used by the GeoTIFF parsers
 - an SSH key for root, used by transfers set to use SSH keys (see
-  [Using an SSH key](/docs/transfer_types#using-an-ssh-key))
+  [Using an SSH key](transfer_types#using-an-ssh-key))
 - optionally MapProxy and TiTiler
 
 It also writes `Config.php`, `openvdm.yaml` (with a new worker API key) and
-`datadashboard.yaml`, and the Apache, Samba and [Supervisor](/docs/supervisor_setup)
+`datadashboard.yaml`, and the Apache, Samba and [Supervisor](supervisor_setup)
 configuration.
 
 ## Sample Data
@@ -94,7 +94,7 @@ Use it to try OpenVDM out, not on a server you'll use for real cruises.
 
 Re-run the install script.  It's safe on an existing install, but it rewrites
 `Config.php`, and some upgrades need a database update.  See
-[Upgrading OpenVDM](/docs/upgrading).
+[Upgrading OpenVDM](upgrading).
 
 ## Directory Layout After Install
 

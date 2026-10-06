@@ -28,9 +28,9 @@ transferred.
 
 ## Data Dashboard
 
-The data dashboard shows what the [plugins](/docs/plugin_overview) made of the current
+The data dashboard shows what the [plugins](plugin_overview) made of the current
 cruise's files.  Its **Main** page has a tile for each data type with its latest file;
-the other tabs are set in [datadashboard.yaml](/docs/config_data_dashboard_yaml) and can
+the other tabs are set in [datadashboard.yaml](config_data_dashboard_yaml) and can
 show:
 
 - Leaflet maps with tracklines, points (e.g. CTD and XBT cast positions) and GeoTIFF
