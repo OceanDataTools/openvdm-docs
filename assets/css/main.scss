@@ -15,3 +15,15 @@ pre {
 img {
 	border: 1px solid;
 }
+
+/* Collapsible sidebar sections (assets/js/nav-collapse.js) */
+.nav__sub-title[role="button"] {
+	cursor: pointer;
+	user-select: none;
+}
+
+.nav-toggle {
+	margin-left: 4px;
+	color: #7a8288;
+	font-weight: bold;
+}
