@@ -66,54 +66,79 @@ is removed.
 
 ## Return Types
 
-A plugin returns a json-object with the following schema:
+`process_file()` returns a dict keyed by data type.  Each data type has three lists:
+
 ```
 {
-  <data_dashboard_type>:
-    visualizernData: {}
-    qualityTests: {}
-    stats: {}
+  "<data type>": {
+    "visualizerData": [...],
+    "qualityTests": [...],
+    "stats": [...]
+  },
   ...
 }
 ```
 
 ### Visualizer Data
 
-A data plugin processes a single file and returns one or more **visualiser objects**
-— GeoJSON features, time-series arrays, image references, or text blocks — that the
-web interface renders on the dashboard.
+What the dashboard draws: GeoJSON for map tracks and points, tile information for map
+overlays, or a list of series for charts.  The format for each is in
+[Data Dashboard](/docs/data_dashboard#dashboard-object-format).  Parsers add entries
+with `add_visualization_data()`.
 
 ### Quality Tests
 
-A quality test plugin subclasses `OpenVDMParserQualityTest` and performs validation
-checks on a file, returning a list of pass/fail/warning results.  Quality test
-results are shown in the **Data Quality** tab of the data dashboard alongside the data
-visualisations.
+Pass, warning or fail results for the file, e.g. whether its values are in range.
+Parsers add them with `add_quality_test_passed()`, `add_quality_test_warning()` and
+`add_quality_test_failed()`.  They're shown on the dashboard's **Data Quality** tab.
 
 ### Statistics
 
-A stats plugin subclasses `OpenVDMParserStats` and tabulated the statistics on a file,
-returning the requested results.  Stat results are shown in the **Data Quality** tab of
-the data dashboard alongside the data visualisations.
+Summary values for the file: the time span, value bounds, geographic bounds, the number
+of valid rows, and so on.  Parsers add them with `add_bounds_stat()`,
+`add_geobounds_stat()`, `add_time_bounds_stat()` and the other `add_*_stat()` methods.
+They're shown on the **Data Quality** tab, and the dashboard combines each data type's
+stats across files by name.  Files with no stats or quality tests aren't listed there.
+
+Chart data uses milliseconds since the epoch for time.  Times shown as text, such as
+the time bounds stat or a point's properties, are ISO 8601 UTC; `format_iso8601()` in
+`openvdm_plugin.py` formats a time that way.
 
 ## Base Classes
 
-Both plugin types are defined in `server/lib/openvdm_plugin.py`:
+All in `server/lib/openvdm_plugin.py`:
 
 | Class | Use for |
 |---|---|
-| `OpenVDMPlugin` | Data extraction and visualisation |
-| `OpenVDMParserQualityTest` | File validation and quality testing |
-| `OpenVDMParserStats` | File statistics |
+| `OpenVDMPlugin` | A plugin: matches files to data types and runs their parsers |
+| `OpenVDMParser` | A parser: holds the file's visualizer data, quality tests and stats |
+| `OpenVDMCSVParser` | A parser for timestamped CSV and NMEA-style log files, with cropping to a time window, resampling and rounding built in |
+| `OpenVDMParserQualityTest` (and its `...Passed`, `...Warning`, `...Failed` subclasses) | One quality test result |
+| `OpenVDMParserStat` (and its `...BoundsStat`, `...GeoBoundsStat`, `...TimeBoundsStat`, ... subclasses) | One statistic |
 
 See [Writing a Plugin](/docs/plugin_development) for a step-by-step guide.
 
 ## Parsers
 
-Parsers live in `server/plugins/parsers/` and handle the low-level work of reading
-a specific file format (NMEA, CSV, JSON, binary, etc.).  A plugin typically
-instantiates one or more parsers to do the heavy lifting and then formats the
-output as dashboard objects.
+Parsers live in `server/plugins/parsers/` and do the work of reading one file format.
+A plugin's file type filters name the parser for each pattern.  Like plugins, they ship
+as `.dist` templates.
 
-Reusable parsers for common NMEA sentence types (GGA, VTG, HDT, etc.) and common
-oceanographic formats are included in the default installation.
+OpenVDM includes parsers for:
+
+- **NMEA sentences:** GGA, VTG, HDT, DBS, DPT, MWD, MWV, XDR, PASHR, PSXN-23/24, ...
+- **Shipboard sensors:** thermosalinographs (SBE 21, SBE 45), SBE 38, met stations,
+  wind, fluorometers, PAR, oxygen, pH, flow rate, sound velocity, pressure, ...
+- **Profiles:** Sea-Bird SBE 9plus CTD casts (`ctd_profile_parser`), MK21 XBT casts
+  (`xbt_parser`), sound velocity profiles
+- **Grids:** GeoTIFFs, as pre-rendered tiles or served by TiTiler
+
+The sample plugins show how they're used:
+
+| Plugin | For |
+|---|---|
+| `openrvdas_plugin.py.dist` | An OpenRVDAS logger's files |
+| `rov_openrvdas_plugin.py.dist` | An ROV's OpenRVDAS files, cropped to each lowering |
+| `ctd_plugin.py.dist` | Sea-Bird SBE 9plus casts: profiles, cast positions, optional PNG plots |
+| `xbt_plugin.py.dist` | MK21 XBT casts: profiles and launch positions.  Needs the xbt-edf-qc library, which `requirements.txt` doesn't install |
+| `em302_plugin.py.dist` | Kongsberg EM302 multibeam GeoTIFFs, served by TiTiler |

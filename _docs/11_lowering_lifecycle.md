@@ -36,7 +36,7 @@ directory (default: `Vehicle/`):
 
 ## 1. Setup New Lowering
 
-**Web UI:** Main → Setup New Lowering
+**Web UI:** Configuration → Main → Setup New Lowering
 
 Provide the **Lowering ID** and optional metadata (start time, location, etc.).
 OpenVDM will:
@@ -55,10 +55,10 @@ writing to the cruise-level directories unaffected.
 
 ## 3. Finalize Current Lowering
 
-**Web UI:** Main → Finalize Current Lowering
+**Web UI:** Configuration → Main → Finalize Current Lowering
 
 1. Runs post-hook commands under `preFinalizeCurrentLowering`.
-2. Runs all lowering-related Collection system transfers
+2. Runs every lowering collection system transfer one last time
 3. Updates the MD5 summary for the lowering directory.
 4. Exports a final lowering configuration snapshot.
 5. Runs post-hook commands under `postFinalizeCurrentLowering`.

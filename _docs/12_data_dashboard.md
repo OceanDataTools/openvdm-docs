@@ -9,21 +9,24 @@ toc_sticky: true
 ---
 
 The **data dashboard** provides a near-real-time view of instrument data as it arrives
-on the shipboard data warehouse.  Each collection system can have one plugin and
-mulitple parsers that parse incoming files and produce visualisations rendered in the
-web interface.
+on the shipboard data warehouse.  Each collection system transfer can have one
+[plugin](/docs/plugin_overview), which uses one or more parsers to turn incoming files
+into maps, charts and data quality results in the web interface.
 
 ## How It Works
 
 After each collection system transfer the `data_dashboard` worker receives an
-`updateDataDashboard` Gearman job containing the list of new and updated files.  If a
-plugin for the Collection system transfer exists, the worker finds any parser whose
-file-match pattern matches the filename, runs the psrser, and saves the resulting
-JSON output to the `Dashboard_Data` extra directory.
+`updateDataDashboard` job with the list of new and updated files.  If the transfer has
+a plugin, the worker runs it on each file: the plugin matches the file against its file
+type filters, runs the matching parsers, and the worker saves the output as JSON in the
+`Dashboard_Data` extra directory (`OpenVDM/DashboardData/` in the cruise).
 
-A **dashboard manifest** file (`DashboardData.json` by default) lists every
-dashboard file and its associated data type, allowing the web interface to quickly
-discover all available visualisations.
+A **dashboard manifest** (`manifest.json` by default, `DATA_DASHBOARD_MANIFEST_FN` in
+[Config.php](/docs/config_php)) lists every dashboard file with its raw file and data
+type, so the web interface can find them quickly.
+
+If a plugin can't be loaded (e.g. a syntax error or a missing library), that transfer's
+files are skipped and the error is logged; other transfers are still processed.
 
 ## Dashboard Object Format
 
@@ -34,7 +37,7 @@ Each parser returns a dict with three lists: `visualizerData` (what the dashboar
 
 | Drawn as (`visType`) | `visualizerData` entries |
 |---|---|
-| Map track (`geoJSON`) | GeoJSON `FeatureCollection`s, e.g. a GPS trackline |
+| Map track or points (`geoJSON`) | GeoJSON `FeatureCollection`s: `LineString`s for a track (e.g. GPS), or `Point`s (e.g. CTD cast positions), whose properties are shown in a popup |
 | Map tiles (`tms`) | An object with `tileURL` (a GeoTIFF served by TiTiler) or `tileDirectory` (pre-rendered tiles) |
 | Chart (`json`, `json-reversedY`, `json-inverted`, `json-reversedY-inverted`, `json-profile`) | One object per series: `{"label": "Temperature", "unit": "C", "data": [[<ms since epoch>, <value>], ...]}` |
 
@@ -47,9 +50,24 @@ Which tabs the dashboard has, and which maps and charts each one shows, is set i
 [datadashboard.yaml](/docs/config_data_dashboard_yaml).  That page lists the map and
 chart types, including depth profiles, and the `lowering` view for vehicle data.
 
+## Basemaps
+
+All maps share the basemaps defined in `www/app/templates/default/js/mapBaseLayers.js`:
+OpenStreetMap (the default), Esri Ocean, Esri Dark and Light Gray, and GMRT, with label
+and seamark overlays.  None needs an API key, but they're loaded from the internet.  For
+use without an internet connection, the installer can set up MapProxy to cache tiles.
+The CARTO basemaps used before 2.16 now need an API key and were removed; a site with its
+own `custom1.js` should update it from `custom1.js.dist`.
+
+## What's Shown
+
+The dashboard leaves out what has nothing to show: cards and panels for data types
+with no files, and, on the **Data Quality** tab, files without stats or quality tests.
+
 ## Rebuild Data Dashboard
 
-If dashboard files become inconsistent — for example after adding a new plugin or
-changing a plugin's output format — use **Configuration → Main → Rebuild Data Dashboard** in the
-web UI.  This re-runs all plugins against every file in the cruise directory and
-regenerates the complete dashboard from scratch.
+After adding or changing a plugin or parser, run **Rebuild Data Dashboard** under
+**Maintenance Tasks** on the **Configuration** page.  It re-runs the plugins on every
+file of every active collection system transfer in the current cruise, regenerates the
+dashboard, and deletes dashboard files that are no longer in the manifest.  Earlier
+cruises aren't rebuilt.

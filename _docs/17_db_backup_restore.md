@@ -78,6 +78,15 @@ Select backup to restore [0-3]:
 python bin/db_backup_restore.py restore database/backups/openvdm_20240115_143022.sql
 ```
 
+## Another Config.php
+
+The credentials are read from `www/app/Core/Config.php` by default.  Use `--config` to
+read them from another file:
+
+```bash
+python bin/db_backup_restore.py --config /path/to/Config.php backup
+```
+
 ## Verbosity
 
 Add `-v` flags to increase output detail:
@@ -89,9 +98,15 @@ python bin/db_backup_restore.py -vv backup   # DEBUG level
 
 ## Prerequisites
 
-The MySQL client tools (`mysqldump` and `mysql`) must be installed and on the PATH.
-On Ubuntu/Debian:
+The script uses the MySQL client tools (`mysqldump` and `mysql`), which the OpenVDM
+installer installs with the database server.
+
+## The Database Export Script
+
+`utils/export_openvdm_db.sh` is a simpler alternative, used in the
+[upgrade](/docs/upgrading) instructions.  Run as root, it dumps the database (also
+without the message rows) to standard output, asking for the MySQL root password twice:
 
 ```bash
-sudo apt install mysql-client
+sudo bash ./utils/export_openvdm_db.sh > ~/openvdm_backup.sql
 ```

@@ -18,19 +18,26 @@ Hooks are defined in `server/etc/openvdm.yaml` under the `postHookCommands` key.
 See [openvdm.yaml](/docs/config_openvdm_yaml#posthookcommands) for the full
 configuration reference.
 
-## Example: Build Cruise Tracklines After Every Transfer
+## Example: Build Cruise Tracklines After Each Dashboard Update
+
+`bin/build_cruise_tracks.py` combines a transfer's dashboard GeoJSON into cruise
+tracklines, so run it after the dashboard update (`postDataDashboard`), not straight
+after the transfer:
 
 ```yaml
 postHookCommands:
-  postCollectionSystemTransfer:
+  postDataDashboard:
     - collectionSystemTransferName: OpenRVDAS
       commandList:
         - name: "Build cruise tracklines"
           command:
-            - "python3"
-            - "bin/build_cruise_tracks.py"
+            - "/opt/openvdm/venv/bin/python"
+            - "/opt/openvdm/bin/build_cruise_tracks.py"
             - "OpenRVDAS"
 ```
+
+Copy the script from its `.dist` template first
+(`cp bin/build_cruise_tracks.py.dist bin/build_cruise_tracks.py`).
 
 ## Example: Create Remote Directories on Cruise Setup
 
@@ -40,11 +47,9 @@ postHookCommands:
     commandList:
       - name: "Create remote data directories"
         command:
-          - "python3"
-          - "bin/build_remote_directory.py"
-          - "--template"
-          - "/home/survey/RemoteDirectoryTemplate"
-          - "--create_source"
+          - "/opt/openvdm/venv/bin/python"
+          - "/opt/openvdm/bin/build_remote_directory.py"
+          - "-s"
 ```
 
 ## Example: Notify a Slack Webhook After Finalization
@@ -78,9 +83,12 @@ postHookCommands:
 
 ## Notes
 
-- Commands run as the OpenVDM system user (default `survey`).
-- A hook failure is reported in the web interface but does not prevent subsequent
-  hooks or the next transfer from running.
+- Commands run as root, like all the workers, from the OpenVDM install directory.  Use
+  full paths, and the venv's Python for OpenVDM's scripts.
+- `postFinalizeCurrentCruise` commands run before the cruise data transfers that end
+  finalization, so files they write are included in those transfers.
+- If a command fails, the others in the list still run; the failure is reported in the
+  web interface and in `/var/log/openvdm/post_hooks.log`.
 - Commands must be specified as a list of strings (not a shell string) — shell
   features like pipes and redirects are not supported directly.  Wrap in a script
   if needed.

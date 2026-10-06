@@ -21,19 +21,24 @@ The main dashboard is the primary operational view, showing:
 - **Task status** for background tasks (MD5 summary, data dashboard, etc.)
 - **Recent messages** from the system
 
-From this page operators can manually trigger individual transfers, stop running
-jobs, and navigate to detailed transfer logs.
+From this page operators can start individual transfers, stop running jobs, and see
+recent transfer logs.  A collection system transfer's incorrectly named files (those
+matching its Exclude Filter) are listed in a highlighted panel, since they weren't
+transferred.
 
 ## Data Dashboard
 
-The data dashboard renders plugin-generated visualisations for the current cruise
-or lowering.  Clicking a collection system name reveals its dashboard panel, which
-may contain:
+The data dashboard shows what the [plugins](/docs/plugin_overview) made of the current
+cruise's files.  Its **Main** page has a tile for each data type with its latest file;
+the other tabs are set in [datadashboard.yaml](/docs/config_data_dashboard_yaml) and can
+show:
 
-- An interactive Leaflet map showing the GPS trackline
-- Chart.js time-series plots for sensor data (depth, temperature, heading, etc.)
-- Image previews for camera systems
-- Quality test results with pass/fail/warning indicators
+- Leaflet maps with tracklines, points (e.g. CTD and XBT cast positions) and GeoTIFF
+  overlays
+- Chart.js charts of sensor data against time, or as depth profiles, with zoom
+- a `lowering` view of one lowering's data
+
+The **Data Quality** tab lists each file's quality tests and statistics.
 
 ## Configuration Menu
 
@@ -41,16 +46,16 @@ The **Configuration** top-level menu provides access to all administrative panel
 
 | Panel | Purpose |
 |---|---|
-| Main | Create new/edit current cruise/lowering, finalized current cruise/lowering, run common tasks |
+| Main | Set up, edit and finalize the cruise and lowering, and run the maintenance tasks |
 | Collection System Transfers | Add, edit, enable/disable, and delete collection system transfers |
 | Extra Directories | Add, edit, enable/disable, and delete subdirectories not associated with collection systems |
-| Cruise Data Transfers | Add, edit, enable/disable, and delete transfers cruise data transfers |
-| Ship-to-ShoreTransfers | Add, edit, enable/disable, and delete ship-to-shore transfers |
-| System | Manage other aspects of the system such as links, and bandwidth settings |
+| Cruise Data Transfers | Add, edit, enable/disable, and delete cruise data transfers |
+| Ship-to-Shore Transfers | Turn the ship-to-shore transfer on and off, and manage the rules for what it sends |
+| System | The shipboard and shoreside data warehouses, the ship-to-shore bandwidth limit, the MD5 file size limit, OpenVDM's own ship-to-shore rules, and links |
 
 ## Cruise / Lowering Management
 
-From the **Main** menu:
+From **Configuration → Main**:
 
 | Action | Description |
 |---|---|

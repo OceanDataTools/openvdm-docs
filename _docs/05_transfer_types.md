@@ -8,10 +8,12 @@ toc_icon: "list"
 toc_sticky: true
 ---
 
-OpenVDM supports six transfer types.  The transfer type is selected in the web UI
-when configuring a transfer.  Most types work for both collection system transfers
-(source) and cruise data transfers (destination); rclone is only used for cruise
-data and ship-to-shore transfers.
+OpenVDM has five transfer types: Local Directory, Rsync Server, SMB Share, SSH Server
+and FTP Server.  Each works both as a collection system transfer's source and as a
+cruise data transfer's destination; choose it in the transfer's **Transfer Type**
+dropdown, which shows that type's connection fields.  Cruise data transfers and the
+[ship-to-shore transfer](/docs/s2s_overview) can also copy to any [rclone](#rclone)
+remote.
 
 ## Local Directory
 
@@ -27,19 +29,21 @@ Files are read from or written to a path on the local filesystem.
 
 Files are transferred using `rsync` over the rsync daemon protocol (TCP port 873).
 
-- **Server:** hostname or IP address (no leading `/` or `\`)
-- **Username / Password:** rsync module credentials
-- **Source/Destination path:** path within the rsync module
+- **Rsync Server:** the server and rsync module, as `server/module` (e.g.
+  `192.168.4.151/cruise_data`)
+- **Username / Password:** the module's credentials
+- **Source/Destination Directory:** a path within the module; `/` for its top level
 
 ## SMB Share
 
 Files are transferred by mounting a Samba (CIFS/SMB) share and running `rsync`
 locally against the mount point.
 
-- **Server:** hostname or IP address (UNC-style `\\server\share` is automatically
-  converted to `/server/share`)
-- **Share name:** the SMB share name
-- **Username / Password / Domain:** authentication credentials
+- **SMB Server/Share:** the server and share, as `//server/share` (e.g.
+  `//192.168.4.151/data`).  A Windows-style `\\server\share` is converted
+- **Username / Password / Domain:** the share's login.  Use `guest` as the username
+  for a share that allows guest access
+- **Source/Destination Directory:** a path within the share; `/` for its top level
 - OpenVDM auto-detects the SMB protocol version (1.0, 2.0, 2.1, or 3.0) before
   mounting
 
@@ -113,22 +117,25 @@ it changes again.
 
 ## rclone
 
-Only used for cruise data and ship-to-shore transfers.  Files are transferred using [rclone](https://rclone.org), enabling support for
-cloud and object storage backends (S3, Google Cloud Storage, Backblaze B2, etc.)
-as well as SFTP.
+A cruise data transfer or the ship-to-shore transfer can copy to any
+[rclone](https://rclone.org) remote: cloud and object storage (S3, Google Cloud Storage,
+Backblaze B2, ...) or anything else rclone supports.
 
-An rclone destination is indicated by the presence of a `:` in the destination
-directory field, using the `remote:path` format — for example `gcs-bucket:cruises`.
+For a cruise data transfer, choose **Local Directory** and give the destination
+directory as `remote:path`, e.g. `gcs-bucket:cruises`.  The `:` is what marks it as an
+rclone remote, so it's allowed only for Local Directory.  For the ship-to-shore
+transfer, give `remote:path` as the SSDW's directory.
 
-- **No leading slash** on the remote name portion before the `:`
-- rclone must be installed and the remote must be configured in rclone's config
-  file before use
+- No leading slash before the remote name
+- The remote must already be set up in root's rclone configuration
+  (`sudo rclone config`), since the transfers run as root.  **Test Setup** checks that
+  the remote can be reached and written to
 
-### rclone for SSH/SFTP and SMB
+### rclone behind other transfer types
 
-For SSH-based and SMB-based transfers, OpenVDM generates a temporary rclone config using
-the SSH/SMB credentials configured in the transfer.  No pre-configured rclone remote
-is required for SSH destinations.
+SSH Server and FTP Server cruise data transfers, and FTP Server sources, also use rclone.
+OpenVDM writes a temporary rclone configuration from the transfer's settings for each
+run, so they don't need a remote set up in advance.
 
 ## Choosing a Transfer Type
 
@@ -138,5 +145,5 @@ is required for SSH destinations.
 | Windows-based collection system with a shared folder | SMB Share |
 | Data volume already connected to the warehouse server | Local Directory |
 | Instrument or collection system that only offers FTP | FTP Server |
-| Cloud backup or archive | rclone |
-| Shore-side SFTP server | SSH or rclone (SFTP) |
+| Cloud backup or archive | rclone remote (Local Directory with `remote:path`) |
+| Shore-side server | SSH Server |

@@ -64,7 +64,7 @@ A custom view is a PHP file in `www/app/views/DataDashboard/`; give its name wit
 | `lowering` | The script that draws a `lowering` tab's maps and charts. Use it **instead of** `dataDashboardDefault`, never both: each draws every map and chart on the page |
 | `charts` | Chart.js and the dashboard's chart helpers. Needed for any `chart` panel |
 | `charts-zoom` | Mouse-wheel and drag zoom on charts, with a reset button |
-| `leaflet` | The map library and basemaps. Needed for any `map` panel |
+| `leaflet` | The map library and basemaps (OpenStreetMap, Esri and GMRT, with label and seamark overlays; no API key needed). Needed for any `map` panel |
 
 Any other entry loads `www/app/templates/default/js/<entry>.js`.
 
@@ -88,7 +88,7 @@ tracks to show; on a chart you choose which file to plot.
 
 | `visType` | Draws |
 |---|---|
-| `geoJSON` | Tracklines from GeoJSON (e.g. GPS positions), one per file, plus the latest position (`default` view) or each file's start and end (`lowering` view) |
+| `geoJSON` | Tracklines from GeoJSON (e.g. GPS positions), one per file and colored by data type, plus the latest position (`default` view) or each file's start and end (`lowering` view).  Point data (e.g. `ctd-position`, `xbt-position`) is drawn as circle markers, with the point's properties in a popup |
 | `tms` | Map tiles, e.g. a GeoTIFF bathymetry grid |
 
 ## Chart Types
