@@ -98,7 +98,7 @@ Python.
 ## Process Management
 
 In production, all workers and the scheduler are managed by **Supervisor**.  The
-install script writes their configuration; see [Supervisor Setup](/docs/supervisor_setup).
+install script writes their configuration; see [Supervisor Setup](supervisor_setup).
 
 ## Component Diagram
 

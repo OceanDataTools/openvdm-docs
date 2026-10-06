@@ -24,8 +24,8 @@ custom data processing.
 
 ## Quick Links
 
-- [Installation Guide](/docs/installation)
-- [Upgrading OpenVDM](/docs/upgrading)
-- [Core Concepts](/docs/core_concepts)
-- [Collection System Transfers](/docs/cst_overview)
-- [Writing a Plugin](/docs/plugin_development)
+- [Installation Guide](docs/installation)
+- [Upgrading OpenVDM](docs/upgrading)
+- [Core Concepts](docs/core_concepts)
+- [Collection System Transfers](docs/cst_overview)
+- [Writing a Plugin](docs/plugin_development)

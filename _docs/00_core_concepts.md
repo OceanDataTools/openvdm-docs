@@ -65,7 +65,7 @@ the web interface renders as maps and graphs.
 
 ## Hooks
 
-A **hook** is used to attach additional processes to key milestones during a cruise or lowering lifecycle.  There are hooks for after a cruise or lowering is created, before and after a cruise or lowering is finalized, and after a collection system transfer or a data dashboard update completes.  See [Post-Hook Commands](/docs/post_hooks).
+A **hook** is used to attach additional processes to key milestones during a cruise or lowering lifecycle.  There are hooks for after a cruise or lowering is created, before and after a cruise or lowering is finalized, and after a collection system transfer or a data dashboard update completes.  See [Post-Hook Commands](post_hooks).
 
 ## Gearman Workers
 

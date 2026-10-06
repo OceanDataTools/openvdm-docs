@@ -8,14 +8,14 @@ toc_icon: "list"
 toc_sticky: true
 ---
 
-`www/etc/datadashboard.yaml` defines the tabs of the [data dashboard](/docs/data_dashboard):
+`www/etc/datadashboard.yaml` defines the tabs of the [data dashboard](data_dashboard):
 which maps and charts each tab shows, and which data types go in them.  The installer
 copies `datadashboard.yaml.dist` to `datadashboard.yaml` if it doesn't exist yet; edit
 the copy, since upgrades don't touch it.  The web app reads it from the path in
-`DASHBOARD_CONF` in [Config.php](/docs/config_php).
+`DASHBOARD_CONF` in [Config.php](config_php).
 
 The file is a list of tabs.  Each tab is a list of panels (placeholders), and each panel
-shows one or more data types, the `data_type` values a [plugin](/docs/plugin_overview)
+shows one or more data types, the `data_type` values a [plugin](plugin_overview)
 gives its parsers.
 
 ```yaml

@@ -104,7 +104,7 @@ installer installs with the database server.
 ## The Database Export Script
 
 `utils/export_openvdm_db.sh` is a simpler alternative, used in the
-[upgrade](/docs/upgrading) instructions.  Run as root, it dumps the database (also
+[upgrade](upgrading) instructions.  Run as root, it dumps the database (also
 without the message rows) to standard output, asking for the MySQL root password twice:
 
 ```bash

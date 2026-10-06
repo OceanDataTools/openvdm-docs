@@ -15,7 +15,7 @@ remote directory structures, and triggering external notifications.
 ## Configuration
 
 Hooks are defined in `server/etc/openvdm.yaml` under the `postHookCommands` key.
-See [openvdm.yaml](/docs/config_openvdm_yaml#posthookcommands) for the full
+See [openvdm.yaml](config_openvdm_yaml#posthookcommands) for the full
 configuration reference.
 
 ## Example: Build Cruise Tracklines After Each Dashboard Update

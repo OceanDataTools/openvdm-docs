@@ -69,7 +69,7 @@ changes into the new ones.
    differences).  Keep the new `openvdm.yaml`'s `workerApiKey` and `transferPublicData`.
    In your `datadashboard.yaml`, remove `lowering` from the Position tab's `jsArray`,
    and add `charts-zoom` to any Lowering tab (see
-   [datadashboard.yaml](/docs/config_data_dashboard_yaml)).
+   [datadashboard.yaml](config_data_dashboard_yaml)).
 6. Restart the workers and set OpenVDM back to **On**:
    ```bash
    sudo supervisorctl restart openvdm:*
@@ -100,7 +100,7 @@ OpenVDM Configuration, Rebuild Data Dashboard, Rebuild MD5 Summary).  Follow "Up
 from 2.14" in INSTALL.md for the full steps.
 
 2.15 moved transfer logs out of the cruise directory to `/var/log/openvdm`
-(`TRANSFER_LOG_DIR` in [Config.php](/docs/config_php)), and `openvdm_214_to_215.sql`
+(`TRANSFER_LOG_DIR` in [Config.php](config_php)), and `openvdm_214_to_215.sql`
 removes the old `Transfer_Logs` extra directory.
 
 ## Older Releases
@@ -116,5 +116,5 @@ INSTALL.md has the steps for each.
 ## Backing Up First
 
 Back up the database before any upgrade, with `utils/export_openvdm_db.sh` as above or
-with the [backup and restore script](/docs/db_backup_restore).  If the server is a
+with the [backup and restore script](db_backup_restore).  If the server is a
 virtual machine, take a snapshot too.

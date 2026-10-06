@@ -15,14 +15,14 @@ data-acquisition computer into the shipboard data warehouse on a recurring sched
 
 1. The **scheduler** starts each enabled collection system transfer that isn't already
    running, every `transferInterval` minutes (see
-   [openvdm.yaml](/docs/config_openvdm_yaml)).  A transfer can also be started from the
+   [openvdm.yaml](config_openvdm_yaml)).  A transfer can also be started from the
    main page.
 2. The **run_collection_system_transfer** worker tests the source, mounts it if it's an
    SMB share or FTP server, lists the source, and copies new and updated files into the
    transfer's directory in the cruise package with `rsync`.
 3. On completion, the worker starts an `updateDataDashboard` job so the transfer's
-   [plugin](/docs/plugin_overview) can process the new files, an MD5 summary update,
-   and any [post-hook commands](/docs/post_hooks).
+   [plugin](plugin_overview) can process the new files, an MD5 summary update,
+   and any [post-hook commands](post_hooks).
 
 If `rsync` fails, the transfer fails, and the reason includes rsync's error and the
 first file that failed.  Files copied before the failure are still processed.
@@ -31,16 +31,16 @@ first file that failed.  Files copied before the failure are still processed.
 
 Navigate to **Configuration → Collection System Transfers → Add/Edit**.  The connection
 fields for each transfer type (server, username, password, ...) are described in
-[Transfer Types](/docs/transfer_types).
+[Transfer Types](transfer_types).
 
 ### Basic Settings
 
 | Field | Description |
 |---|---|
-| **Name** | Short name, without spaces.  Also names the transfer's [plugin](/docs/plugin_overview#plugin-discovery) and is the `{collectionSystemTransferName}` hook token |
+| **Name** | Short name, without spaces.  Also names the transfer's [plugin](plugin_overview#plugin-discovery) and is the `{collectionSystemTransferName}` hook token |
 | **Long Name** | Name shown in the web interface |
 | **Cruise or Lowering?** | Whether the transfer copies into the cruise or into the current lowering.  Shown only when lowering components are on |
-| **Transfer Type** | See [Transfer Types](/docs/transfer_types) |
+| **Transfer Type** | See [Transfer Types](transfer_types) |
 | **Source Directory** | Where the files are on the source.  May contain [wildcards](#wildcard-source-directories) |
 | **Source Directory is mountpoint?** | Local Directory only: fail if nothing is mounted there |
 | **Destination Directory** | Path inside the cruise (or lowering) directory.  May contain [tokens](#destination-directory-tokens) |

@@ -10,7 +10,7 @@ toc_sticky: true
 
 The **data dashboard** provides a near-real-time view of instrument data as it arrives
 on the shipboard data warehouse.  Each collection system transfer can have one
-[plugin](/docs/plugin_overview), which uses one or more parsers to turn incoming files
+[plugin](plugin_overview), which uses one or more parsers to turn incoming files
 into maps, charts and data quality results in the web interface.
 
 ## How It Works
@@ -22,7 +22,7 @@ type filters, runs the matching parsers, and the worker saves the output as JSON
 `Dashboard_Data` extra directory (`OpenVDM/DashboardData/` in the cruise).
 
 A **dashboard manifest** (`manifest.json` by default, `DATA_DASHBOARD_MANIFEST_FN` in
-[Config.php](/docs/config_php)) lists every dashboard file with its raw file and data
+[Config.php](config_php)) lists every dashboard file with its raw file and data
 type, so the web interface can find them quickly.
 
 If a plugin can't be loaded (e.g. a syntax error or a missing library), that transfer's
@@ -33,7 +33,7 @@ files are skipped and the error is logged; other transfers are still processed.
 Each parser returns a dict with three lists: `visualizerData` (what the dashboard draws),
 `qualityTests` and `stats` (shown on the **Data Quality** page).  The entries in
 `visualizerData` depend on how the data type is drawn, which is set per tab in
-[datadashboard.yaml](/docs/config_data_dashboard_yaml):
+[datadashboard.yaml](config_data_dashboard_yaml):
 
 | Drawn as (`visType`) | `visualizerData` entries |
 |---|---|
@@ -47,7 +47,7 @@ as a depth profile without changing its parser.
 ## Tabs and Charts
 
 Which tabs the dashboard has, and which maps and charts each one shows, is set in
-[datadashboard.yaml](/docs/config_data_dashboard_yaml).  That page lists the map and
+[datadashboard.yaml](config_data_dashboard_yaml).  That page lists the map and
 chart types, including depth profiles, and the `lowering` view for vehicle data.
 
 ## Basemaps

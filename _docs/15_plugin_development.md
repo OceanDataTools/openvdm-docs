@@ -10,7 +10,7 @@ toc_sticky: true
 
 This page walks through adding dashboard data for a new instrument: a parser that reads
 its files, and a plugin that tells OpenVDM which files to give it.  Read
-[Plugin Overview](/docs/plugin_overview) first.
+[Plugin Overview](plugin_overview) first.
 
 The quickest start is to copy the sample plugin and parser closest to your data.  The
 `.dist` templates in `server/plugins/` and `server/plugins/parsers/` are complete,
@@ -109,7 +109,7 @@ Save it as `server/plugins/parsers/paro_parser.py`.  The helpers it uses:
 | `crop_data(df)` | Keeps the rows between `start_dt` and `stop_dt`, when given (e.g. a lowering's start and end) |
 | `resample_data(df)` | Averages to one row per minute, so long files stay small enough to chart |
 | `round_data(df, precision)` | Rounds the columns given in `precision` |
-| `add_visualization_data()`, `add_*_stat()`, `add_quality_test_*()` | Add to the parser's output (see [Return Types](/docs/plugin_overview#return-types)) |
+| `add_visualization_data()`, `add_*_stat()`, `add_quality_test_*()` | Add to the parser's output (see [Return Types](plugin_overview#return-types)) |
 | `send_error_msg(errors, filepath)` | Logs the lines that couldn't be parsed |
 | `run_cli()` | Lets the parser be run from the command line for testing |
 
@@ -156,14 +156,14 @@ Each filter has:
 
 | Key | Description |
 |---|---|
-| `data_type` | The name the dashboard uses for this data, in [datadashboard.yaml](/docs/config_data_dashboard_yaml).  Lower case, no spaces |
+| `data_type` | The name the dashboard uses for this data, in [datadashboard.yaml](config_data_dashboard_yaml).  Lower case, no spaces |
 | `regex` | A glob pattern matched against the file's full path |
 | `parser` | The parser's key in `PARSER_MAP` |
 | `parser_options` | Options passed to the parser's constructor, e.g. `{"time_format": "%Y-%m-%dT%H:%M:%S.%fZ"}` |
 
 Several filters can match the same file, each producing its own data type.  The module
 must define `process_file(filepath)`, and can define `get_source_files(filepath)` (see
-[Module-Level Functions](/docs/plugin_overview#module-level-functions)).
+[Module-Level Functions](plugin_overview#module-level-functions)).
 
 Test the plugin the same way as the parser:
 
@@ -174,7 +174,7 @@ Test the plugin the same way as the parser:
 ## 4. Show the Data
 
 Add a panel for the new data type to a tab in
-[datadashboard.yaml](/docs/config_data_dashboard_yaml).  For a chart panel, the panel's
+[datadashboard.yaml](config_data_dashboard_yaml).  For a chart panel, the panel's
 `id` is the data type:
 
 ```yaml

@@ -36,7 +36,7 @@ logs are in `/var/log/openvdm/`.
 | `lowering` | `lowering.py` | Lowering setup, finalization and configuration export |
 | `cruise_directory` | `cruise_directory.py` | Creates and rebuilds the cruise directory |
 | `lowering_directory` | `lowering_directory.py` | Creates and rebuilds lowering directories |
-| `post_hooks` | `post_hooks.py` | Runs [post-hook commands](/docs/post_hooks) |
+| `post_hooks` | `post_hooks.py` | Runs [post-hook commands](post_hooks) |
 | `stop_job` | `stop_job.py` | Stops running jobs |
 | `scheduler` | `scheduler.py` | Starts transfers on schedule |
 | `size_cacher` | `size_cacher.py` | Keeps the cruise and lowering directory sizes up to date |

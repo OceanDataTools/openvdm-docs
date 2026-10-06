@@ -83,7 +83,7 @@ is removed.
 
 What the dashboard draws: GeoJSON for map tracks and points, tile information for map
 overlays, or a list of series for charts.  The format for each is in
-[Data Dashboard](/docs/data_dashboard#dashboard-object-format).  Parsers add entries
+[Data Dashboard](data_dashboard#dashboard-object-format).  Parsers add entries
 with `add_visualization_data()`.
 
 ### Quality Tests
@@ -116,7 +116,7 @@ All in `server/lib/openvdm_plugin.py`:
 | `OpenVDMParserQualityTest` (and its `...Passed`, `...Warning`, `...Failed` subclasses) | One quality test result |
 | `OpenVDMParserStat` (and its `...BoundsStat`, `...GeoBoundsStat`, `...TimeBoundsStat`, ... subclasses) | One statistic |
 
-See [Writing a Plugin](/docs/plugin_development) for a step-by-step guide.
+See [Writing a Plugin](plugin_development) for a step-by-step guide.
 
 ## Parsers
 

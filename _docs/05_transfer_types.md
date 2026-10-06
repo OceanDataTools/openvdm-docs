@@ -12,7 +12,7 @@ OpenVDM has five transfer types: Local Directory, Rsync Server, SMB Share, SSH S
 and FTP Server.  Each works both as a collection system transfer's source and as a
 cruise data transfer's destination; choose it in the transfer's **Transfer Type**
 dropdown, which shows that type's connection fields.  Cruise data transfers and the
-[ship-to-shore transfer](/docs/s2s_overview) can also copy to any [rclone](#rclone)
+[ship-to-shore transfer](s2s_overview) can also copy to any [rclone](#rclone)
 remote.
 
 ## Local Directory
