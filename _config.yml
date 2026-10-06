@@ -26,6 +26,10 @@ include:
 exclude:
   - _docs/wip-*
 
+# Scripts loaded at the end of every page (the theme adds the baseurl)
+after_footer_scripts:
+  - /assets/js/nav-collapse.js
+
 # Plugins
 plugins:
   - jekyll-paginate
