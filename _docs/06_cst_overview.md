@@ -13,48 +13,64 @@ data-acquisition computer into the shipboard data warehouse on a recurring sched
 
 ## How It Works
 
-1. The **scheduler** worker submits a `runCollectionSystemTransfer` Gearman job at
-   the configured interval for each active, non-running transfer.
-2. The **run_collection_system_transfer** worker picks up the job, tests the source,
-   mounts any required shares, and runs `rsync` (or rclone) to copy new and updated
-   files into the destination directory inside the cruise package.
-3. On completion, the worker submits an `updateDataDashboard` job so plugins can
-   process any newly transferred files.
+1. The **scheduler** starts each enabled collection system transfer that isn't already
+   running, every `transferInterval` minutes (see
+   [openvdm.yaml](/docs/config_openvdm_yaml)).  A transfer can also be started from the
+   main page.
+2. The **run_collection_system_transfer** worker tests the source, mounts it if it's an
+   SMB share or FTP server, lists the source, and copies new and updated files into the
+   transfer's directory in the cruise package with `rsync`.
+3. On completion, the worker starts an `updateDataDashboard` job so the transfer's
+   [plugin](/docs/plugin_overview) can process the new files, an MD5 summary update,
+   and any [post-hook commands](/docs/post_hooks).
+
+If `rsync` fails, the transfer fails, and the reason includes rsync's error and the
+first file that failed.  Files copied before the failure are still processed.
 
 ## Configuration Fields
 
-Navigate to **Configuration → Collection System Transfers → Add/Edit** in the web
-interface to manage transfers.
+Navigate to **Configuration → Collection System Transfers → Add/Edit**.  The connection
+fields for each transfer type (server, username, password, ...) are described in
+[Transfer Types](/docs/transfer_types).
 
 ### Basic Settings
 
 | Field | Description |
 |---|---|
-| **Name** | Short identifier (used in hook token `{collectionSystemTransferName}`) |
-| **Long Name** | Human-readable display name |
-| **Cruise or Lowering** | Whether this transfer is scoped to a cruise or a lowering |
-| **Destination Directory** | Path inside the cruise/lowering directory |
+| **Name** | Short name, without spaces.  Also names the transfer's [plugin](/docs/plugin_overview#plugin-discovery) and is the `{collectionSystemTransferName}` hook token |
+| **Long Name** | Name shown in the web interface |
+| **Cruise or Lowering?** | Whether the transfer copies into the cruise or into the current lowering.  Shown only when lowering components are on |
 | **Transfer Type** | See [Transfer Types](/docs/transfer_types) |
-| **Enabled** | Whether the scheduler should submit jobs for this transfer |
+| **Source Directory** | Where the files are on the source.  May contain [wildcards](#wildcard-source-directories) |
+| **Source Directory is mountpoint?** | Local Directory only: fail if nothing is mounted there |
+| **Destination Directory** | Path inside the cruise (or lowering) directory.  May contain [tokens](#destination-directory-tokens) |
 
-### Source Filters
+### Filters
+
+Each filter is a comma-separated list of glob patterns.
 
 | Field | Description |
 |---|---|
-| **Include Filters** | Glob patterns — only matching files are transferred |
-| **Exclude Filters** | Glob patterns — matching files are skipped, but will be flagged as incorrectly names |
-| **Ignore Filters** | Glob patterns — matching files are skipped |
+| **Include Filter** | Only matching files are transferred |
+| **Exclude Filter** | Matching files aren't transferred, and are listed as incorrectly named files on the main page |
+| **Ignore Filter** | Matching files aren't transferred, silently |
 
 ### Transfer Behaviour
 
 | Field | Description |
 |---|---|
-| **Skip based on file timestamps** | Transfer only files whose modification time falls within the cruise/lowering start/stop timestamps |
-| **Staleness** | Transfer files only if their file sizes have not changes within the specified period |
-| **Remove Source Files** | Delete transferred files from the source after a successful copy |
-| **Skip Empty Directories** | Do not create empty directories in the destination |
-| **Skip Empty Files** | Do not transfer zero-byte files |
-| **Sync from Source** | Mirror the source — delete destination files not present in the source |
+| **Skip files created/modified outside of cruise start/stop times?** | Transfer only files whose modification time is within the cruise (or lowering) start and end times |
+| **Skip files being actively written to?** | Transfer a file only once its size hasn't changed for the **Time to wait when checking for active writes** |
+| **Remove source files after copy?** | Delete files from the source once they've been copied |
+| **Skip empty directories** / **Skip empty files** | Don't copy empty directories or zero-byte files |
+| **Sync with source directory?** | Delete files from the destination that are no longer on the source |
+| **Transfer bandwidth limit** | Maximum rate in kB/s; `0` for no limit |
+
+### Test Setup
+
+**Test Setup** checks the source without copying anything: that the server can be
+reached and the login works, and that the source directory exists.  For a transfer that
+removes source files, it also checks that OpenVDM can write to the source.
 
 ## Always-Ignored Files and Folders
 
@@ -119,7 +135,7 @@ time.
 
 | Status | Meaning |
 |---|---|
-| **Idle** | No job running; waiting for next scheduled run |
+| **Idle** | Enabled, and waiting for its next run |
 | **Running** | Transfer in progress |
-| **Error** | Last run encountered an error; see transfer log |
-| **Disabled** | Excluded from scheduling |
+| **Error** | The last run failed; the reason is on the main page and in the transfer log |
+| **Disabled** | Turned off; the scheduler doesn't start it |

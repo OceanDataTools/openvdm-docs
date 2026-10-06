@@ -12,15 +12,17 @@ A cruise in OpenVDM moves through a defined lifecycle from creation to finalizat
 
 ## 1. Setup New Cruise
 
-**Web UI:** Main → Setup New Cruise
+**Web UI:** Configuration → Main → Setup New Cruise
 
 Provide the **Cruise ID** and optional metadata (start date, vessel, PI, etc.), then
 click **Setup New Cruise**.  OpenVDM will:
 
-1. Create `<warehouse_base_dir>/<cruiseID>/` and all required subdirectories.
-2. Initialise the MD5 summary and data dashboard.
+1. Create `<warehouse_base_dir>/<cruiseID>/` and its subdirectories, including the
+   lowering base directory (`Vehicle/` by default) when lowering components are on.
+2. Create the MD5 summary files and the data dashboard directory and manifest.
 3. Export the current OpenVDM configuration to `<warehouse_base_dir>/<cruiseID>/`.
-4. Run any post-hook commands configured under `postSetupNewCruise` in `openvdm.yaml`.
+4. Clear out the PublicData share, if `transferPublicData` is on.
+5. Run any post-hook commands configured under `postSetupNewCruise` in `openvdm.yaml`.
 
 ## 2. Active Cruise
 
@@ -29,34 +31,36 @@ During the cruise:
 - Collection system transfers run on the configured interval, ingesting data from
   each system.
 - The data dashboard updates automatically after each transfer.
-- Cruise data transfers (backup drives, NAS) mirror the growing cruise package.
-- The ship-to-shore transfer continuously syncs selected files to the shore archive.
+- Cruise data transfers (backup drives, NAS) copy the growing cruise package.
+- The ship-to-shore transfer sends selected files to the shoreside data warehouse.
 - Lowerings can be created and finalised independently within the cruise.
 
 ### Manual Actions
 
-From the **Actions** menu in the web UI you can at any time:
+Transfers can be started from the main page at any time.  The **Configuration** page
+also lists these **Maintenance Tasks** (named with your `CRUISE_NAME`):
 
-| Action | Description |
+| Task | Description |
 |---|---|
-| Run Collection System Transfer | Manually trigger a specific transfer |
-| Run Cruise Data Transfer | Manually trigger a CDT |
-| Rebuild Cruise Directory | Re-create any missing subdirectories |
-| Rebuild Data Dashboard | Re-process all dashboard files from scratch |
+| Rebuild Cruise Directory | Re-create any missing subdirectories, and fix permissions |
+| Rebuild Data Dashboard | Re-run the plugins on all the cruise's files |
 | Rebuild MD5 Summary | Recompute all checksums |
-| Export OpenVDM Config | Re-export the configuration snapshot |
+| Re-export the OpenVDM Configuration | Re-export the configuration snapshot |
+| Sync PublicData within Cruise Directory | Copy the PublicData share into the cruise |
 
 ## 3. Finalize Current Cruise
 
-**Web UI:** Main → Finalize Current Cruise
+**Web UI:** Configuration → Main → Finalize Current Cruise
 
 Finalization prepares the cruise package for archival:
 
 1. Runs post-hook commands under `preFinalizeCurrentCruise`.
-2. Runs every Collection system transfer to ingest latest data files
-3. Updates the data dashboard and MD5 summary.
+2. Runs every collection system transfer one last time, which also updates the data
+   dashboard and MD5 summary.
+3. Copies the PublicData share into the cruise.
 4. Exports a final OpenVDM configuration snapshot.
 5. Runs post-hook commands under `postFinalizeCurrentCruise`.
+6. Runs every enabled cruise data transfer, so the backups include everything above.
 
 ## Cruise ID Conventions
 

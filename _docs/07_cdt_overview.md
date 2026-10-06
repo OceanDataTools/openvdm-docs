@@ -8,45 +8,61 @@ toc_icon: "list"
 toc_sticky: true
 ---
 
-A **Cruise Data Transfer (CDT)** pushes the entire cruise data package from the
-shipboard data warehouse to a secondary destination — a backup drive, NAS, or
-cloud archive.
+A **Cruise Data Transfer (CDT)** copies the whole cruise data package from the
+shipboard data warehouse to another location: a backup drive, a NAS, a server or cloud
+storage.
 
 ## How It Works
 
-1. The **scheduler** submits a `runCruiseDataTransfer` Gearman job for each active,
-   non-running cruise data transfer.
-2. The worker tests the destination, builds an exclude filter list, then runs
-   `rsync` or rclone to mirror `<warehouse_base_dir>/<cruiseID>/` to the destination.
-   The exclude list always includes the
+1. The **scheduler** starts each enabled cruise data transfer that isn't already running,
+   every `transferInterval` minutes (see [openvdm.yaml](/docs/config_openvdm_yaml)).  A
+   transfer can also be started from the main page, and they all run at the end of
+   [Finalize Current Cruise](/docs/cruise_lifecycle#3-finalize-current-cruise).
+2. The worker tests the destination, builds the list of what to leave out, then copies
+   `<warehouse_base_dir>/<cruiseID>/` to the destination with `rsync` or rclone.  The
+   list always includes the
    [always-ignored files and folders](/docs/cst_overview#always-ignored-files-and-folders).
-3. Progress is reported back to the Gearman job as a percentage.
+3. Progress is shown as a percentage on the main page.
 
-## Destination Directory Semantics
+If `rsync` or rclone fails, the transfer fails, and the reason includes the tool's error
+and the first file that failed.
 
-How the **Destination Directory** field is interpreted depends on the transfer type:
+## Destination Directory
 
-| Transfer type | Field interpretation |
+How the **Destination Directory** is used depends on the transfer type.  The cruise is
+copied into `<destination directory>/<cruiseID>`.
+
+| Transfer type | Destination Directory |
 |---|---|
-| Local Directory (no `:`) | Absolute path on the local filesystem — leading `/` required |
-| Local Directory (contains `:`) | rclone `remote:path` — no leading slash on the remote name |
-| All other types | Relative path appended to the cruise directory on the destination — no leading slash |
+| Local Directory | An absolute path on the OpenVDM server (leading `/`), e.g. `/mnt/backup` |
+| Local Directory, containing `:` | An [rclone](/docs/transfer_types#rclone) `remote:path`, e.g. `s3-archive:cruises` |
+| Rsync Server | A path within the rsync module given in the **Rsync Server** field; `/` for the module's top level |
+| SMB Share | A path within the share given in the **SMB Server/Share** field; `/` for the share's top level |
+| SSH Server | An absolute path on the server (leading `/`) |
+| FTP Server | An absolute path on the FTP server (leading `/`) |
+
+A `:` is allowed only for Local Directory.
 
 ## Configuration Fields
 
-### Basic Settings
+Navigate to **Configuration → Cruise Data Transfers → Add/Edit**.  The connection fields
+for each transfer type are described in [Transfer Types](/docs/transfer_types).
 
 | Field | Description |
 |---|---|
-| **Name / Long Name** | Identifiers shown in the UI |
+| **Name / Long Name** | Identifiers shown in the web interface |
 | **Transfer Type** | See [Transfer Types](/docs/transfer_types) |
-| **Destination Directory** | Where to write the cruise package (see semantics above) |
-| **Enabled** | Whether the scheduler submits jobs for this transfer |
+| **Destination Directory** | See [above](#destination-directory) |
+| **Destination Directory is mountpoint?** | Local Directory only: fail if nothing is mounted there, rather than filling the OpenVDM server's disk |
+| **Skip empty directories** / **Skip empty files** | Don't copy empty directories or zero-byte files |
+| **Sync with source directory** | Delete files at the destination that are no longer in the cruise |
+| **Transfer bandwidth limit** | Maximum rate in kB/s; `0` for no limit |
+| **Include OpenVDM generated files?** | Include the cruise and lowering configuration files and the MD5 summary |
+| **Collection Systems to EXCLUDE** | Collection system transfers whose directories aren't copied |
+| **Extra Directories to EXCLUDE** | Extra directories that aren't copied |
 
-### Exclusions
+## Test Setup
 
-| Field | Description |
-|---|---|
-| **Excluded Collection Systems** | Collection system transfers whose destination directories are excluded from this CDT |
-| **Excluded Extra Directories** | Extra directories excluded from this CDT |
-| **Include OpenVDM Files** | Whether to include OpenVDM metadata files (MD5 summary, cruise config) |
+**Test Setup** checks the destination without copying anything: that the server can be
+reached and the login works, that the destination directory exists, and that OpenVDM can
+write to it.  Fix any failed check before running the transfer.
